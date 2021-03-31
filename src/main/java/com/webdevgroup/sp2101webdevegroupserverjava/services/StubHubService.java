@@ -24,11 +24,11 @@ public class StubHubService {
         events.setEvents(new HashSet<>());
         Events byCity=client.searchEventsByCity(name);
         Events byArtists=client.searchEventsByArtist(name);
-        Events byEvenetName=client.searchEventsByEventName(name);
+        Events byEventName=client.searchEventsByEventName(name);
         events.getEvents().addAll(byArtists.getEvents());
         events.getEvents().addAll(byCity.getEvents());
-        events.getEvents().addAll(byEvenetName.getEvents());
-        events.setNumFound(byCity.getNumFound()+byArtists.getNumFound()+byEvenetName.getNumFound());
+        events.getEvents().addAll(byEventName.getEvents());
+        events.setNumFound(byCity.getNumFound()+byArtists.getNumFound()+byEventName.getNumFound());
         return events;
     }
 }

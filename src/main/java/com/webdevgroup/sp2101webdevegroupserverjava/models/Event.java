@@ -12,17 +12,17 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Event{
-    public int id;
-    public String name;
-    public String status;
-    public String webURI;
-    public Date eventDateLocal;
-    public Date eventDateUTC;
-    public Date createdDate;
-    public Date lastUpdatedDate;
-    public boolean hideEventDate;
-    public boolean hideEventTime;
-    public Venue venue;
-    public String timezone;
-    public Ancestors ancestors;
+    private int id;
+    private String name;
+    private String status;
+    private String webURI;
+    private Date eventDateLocal;
+    private Date eventDateUTC;
+    private Date createdDate;
+    private Date lastUpdatedDate;
+    private boolean hideEventDate;
+    private boolean hideEventTime;
+    private Venue venue;
+    private String timezone;
+    private Ancestors ancestors;
 }

@@ -8,6 +8,7 @@ import java.util.List;
 @Getter
 @Setter
 public class Ancestors{
-    public List<Category> categories;
-    public List<Grouping> groupings;
+    private List<Category> categories;
+    private List<Grouping> groupings;
+    private List<Performer> performers;
 }

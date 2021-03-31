@@ -5,7 +5,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class Category{
+public class Performer {
     private int id;
     private String name;
 }

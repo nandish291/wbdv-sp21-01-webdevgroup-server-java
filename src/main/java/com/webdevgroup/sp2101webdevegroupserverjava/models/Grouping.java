@@ -6,6 +6,6 @@ import lombok.Setter;
 @Getter
 @Setter
 public class Grouping{
-    public int id;
-    public String name;
+    private int id;
+    private String name;
 }

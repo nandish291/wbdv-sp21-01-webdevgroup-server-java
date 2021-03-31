@@ -6,12 +6,12 @@ import lombok.Setter;
 @Getter
 @Setter
 public class Venue{
-    public int id;
-    public String name;
-    public String city;
-    public String state;
-    public String postalCode;
-    public String country;
-    public int venueConfigId;
-    public String venueConfigName;
+    private int id;
+    private String name;
+    private String city;
+    private String state;
+    private String postalCode;
+    private String country;
+    private int venueConfigId;
+    private String venueConfigName;
 }

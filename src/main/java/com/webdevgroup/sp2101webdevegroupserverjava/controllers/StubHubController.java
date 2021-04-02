@@ -25,4 +25,10 @@ public class StubHubController {
     Events searchEvents(@RequestParam String name){
         return service.searchEvents(name);
     }
+
+    @GetMapping("/event/{id}")
+    Event getEvent(@PathVariable Integer id)
+    {
+       return service.getEventById(id);
+    }
 }

@@ -13,6 +13,9 @@ public interface StubHubClient {
     Events getAllEvents();
 
     @GetMapping("/search/events/v3")
+    Events searchEventsById(@RequestParam(value = "id") Integer id);
+
+    @GetMapping("/search/events/v3")
     Events searchEventsByCity(@RequestParam(value = "city") String city);
 
     @GetMapping("/search/events/v3")

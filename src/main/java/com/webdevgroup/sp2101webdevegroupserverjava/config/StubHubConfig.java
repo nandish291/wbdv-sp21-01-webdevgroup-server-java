@@ -12,7 +12,7 @@ public class StubHubConfig {
     @Bean
     public RequestInterceptor requestInterceptor() {
         return requestTemplate -> {
-            requestTemplate.header("Authorization", "Bearer M4imChtVC42eUXg9okgnlFqBLXpY");
+            requestTemplate.header("Authorization", "Bearer 3JKqVGhCzqtbkgPJLQwvR8UKpTW2");
             requestTemplate.header("Accept", "application/json");
             requestTemplate.header("Accept-Encoding", "gzip");
         };

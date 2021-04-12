@@ -6,23 +6,21 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.Date;
+import java.util.List;
 
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 public class Event{
-    private int id;
-    private String name;
-    private String status;
-    private String webURI;
-    private Date eventDateLocal;
-    private Date eventDateUTC;
-    private Date createdDate;
-    private Date lastUpdatedDate;
-    private boolean hideEventDate;
-    private boolean hideEventTime;
-    private Venue venue;
-    private String timezone;
-    private Ancestors ancestors;
+    public String title;
+    public String url;
+    public Date datetime_local;
+    public List<Performer> performers;
+    public Venue venue;
+    public String short_title;
+    public Date datetime_utc;
+    public double score;
+    public String type;
+    public int id;
 }

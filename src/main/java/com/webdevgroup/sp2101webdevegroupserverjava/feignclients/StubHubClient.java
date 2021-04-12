@@ -6,10 +6,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 
-@FeignClient(value = "stubHubClient",url = "https://api.stubhub.com/sellers")
+@FeignClient(value = "stubHubClient",url = "https://api.seatgeek.com/2")
 public interface StubHubClient {
 
-    @GetMapping("search/bulk/events/v3")
+    @GetMapping("/events?client_id=MjE2OTUwODJ8MTYxODA4NjcyNS44MzkzNTc2")
     Events getAllEvents();
 
     @GetMapping("/search/events/v3")

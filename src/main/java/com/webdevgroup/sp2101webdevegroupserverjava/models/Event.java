@@ -5,22 +5,31 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.Date;
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import java.sql.Date;
 import java.util.List;
 
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Entity(name = "events")
 public class Event{
-    public String title;
-    public String url;
-    public Date datetime_local;
-    public List<Performer> performers;
-    public Venue venue;
-    public String short_title;
-    public Date datetime_utc;
-    public double score;
-    public String type;
-    public int id;
+    @Id
+    private Long id;
+    private String title;
+    private Date datetime_local;
+    @ManyToMany
+    @NotNull
+    private List<Performer> performers;
+    @ManyToOne(cascade = CascadeType.ALL)
+    @NotNull
+    private Venue venue;
+    private String short_title;
+    private Date datetime_utc;
+    private double score;
+    private String type;
+    private int likes;
+    private int attending;
 }

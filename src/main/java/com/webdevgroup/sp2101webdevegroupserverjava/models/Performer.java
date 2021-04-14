@@ -3,17 +3,20 @@ package com.webdevgroup.sp2101webdevegroupserverjava.models;
 import lombok.Getter;
 import lombok.Setter;
 
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
 @Getter
 @Setter
+@Entity
+@Table(name = "performers")
 public class Performer{
-    public String name;
-    public String short_name;
-    public String url;
-    public String image;
-    public Images images;
-    public boolean primary;
-    public int id;
-    public int score;
-    public String type;
-    public String slug;
+    @Id
+    private Long id;
+    private String name;
+    private String short_name;
+    private String image;
+    private String type;
+    private String slug;
 }

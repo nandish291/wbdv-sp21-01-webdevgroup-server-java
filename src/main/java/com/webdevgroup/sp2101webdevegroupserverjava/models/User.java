@@ -12,12 +12,15 @@ public class User {
     private String name;
     private String username;
     private String password;
+    private String confirmPassword;
     private String email;
 
-    public User(String name, String username, String password, String email) {
+
+    public User(String name, String username, String password, String confirmPassword, String email) {
+        this.name = name;
         this.username = username;
         this.password = password;
-        this.name = name;
+        this.confirmPassword = confirmPassword;
         this.email = email;
     }
 
@@ -26,6 +29,14 @@ public class User {
         this.password = "";
         this.name = "";
         this.email = "";
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getUsername() {
@@ -44,12 +55,12 @@ public class User {
         this.password = password;
     }
 
-    public String getName() {
-        return name;
+    public String getConfirmPassword() {
+        return confirmPassword;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setConfirmPassword(String confirmPassword) {
+        this.confirmPassword = confirmPassword;
     }
 
     public String getEmail() {

@@ -10,28 +10,36 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
-@CrossOrigin(origins = "*")
+//@CrossOrigin(origins = "*")
+@CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
 public class UserController {
 
     @Autowired
     UserService service;
 
-    @PostMapping("/api/register/{name}/{username}/{password}/{email}")
+    @PostMapping("/api/register/{name}/{username}/{password}/{confirmPassword}/{email}")
     public User register(
+            @PathVariable("name") String name,
             @PathVariable("username") String username,
             @PathVariable("password") String password,
-            @PathVariable("name") String name,
+            @PathVariable("password") String confirmPassword,
             @PathVariable("email") String email,
             HttpSession session) {
-        User user = new User(name, username, password, email);
+        User user = new User(name, username, password, confirmPassword, email);
         user.setUsername(username);
         user.setPassword(password);
         session.setAttribute("currentUser", user);
-        service.createUser(name, username, password, email);
+        service.createUser(name, username, password, confirmPassword, email);
         System.out.println("this line is reached");
         System.out.println(username);
         System.out.println(password);
         return user;
+    }
+
+    // TODO: must be sure that client is storing the same cookie, so maybe enable the credentials and select the specific CORS
+    @GetMapping("/currentUser")
+    public User currentUser(HttpSession session) {
+        return (User)session.getAttribute("currentUser");
     }
 
     @GetMapping("/api/profile")
@@ -60,10 +68,10 @@ public class UserController {
         if (user.getUsername().equals(username)
                 && user.getPassword().equals(password)) {
             session.setAttribute("currentUser", user);
+            return true;
         }
         return false;
     }
-
 
 
 //    @GetMapping("/api/session/set/{attr}/{value}")

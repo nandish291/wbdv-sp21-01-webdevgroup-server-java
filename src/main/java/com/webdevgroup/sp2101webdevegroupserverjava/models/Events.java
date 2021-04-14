@@ -8,6 +8,5 @@ import java.util.Set;
 @Getter
 @Setter
 public class Events {
-    private int numFound;
     private Set<Event> events;
 }

@@ -12,14 +12,12 @@ public class StubHubConfig {
     @Bean
     public RequestInterceptor requestInterceptor() {
         return requestTemplate -> {
-            requestTemplate.header("Authorization", "Bearer 3JKqVGhCzqtbkgPJLQwvR8UKpTW2");
-            requestTemplate.header("Accept", "application/json");
-            requestTemplate.header("Accept-Encoding", "gzip");
+            requestTemplate.query("client_id","MjE2OTUwODJ8MTYxODA4NjcyNS44MzkzNTc2");
         };
     }
 
-    @Bean
-    public ApacheHttpClient client() {
-        return new ApacheHttpClient();
-    }
+//    @Bean
+//    public ApacheHttpClient client() {
+//        return new ApacheHttpClient();
+//    }
 }

@@ -2,19 +2,17 @@ package com.webdevgroup.sp2101webdevegroupserverjava.controllers;
 
 import com.webdevgroup.sp2101webdevegroupserverjava.models.Event;
 import com.webdevgroup.sp2101webdevegroupserverjava.models.Events;
-import com.webdevgroup.sp2101webdevegroupserverjava.services.StubHubService;
+import com.webdevgroup.sp2101webdevegroupserverjava.services.EventService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 
 @RestController
 @RequiredArgsConstructor
 @CrossOrigin(origins = "*")
-public class StubHubController {
+public class EventController {
 
-    private final StubHubService service;
+    private final EventService service;
 
     @GetMapping("/events")
     Events getAllEvents(){
@@ -30,5 +28,17 @@ public class StubHubController {
     Event getEvent(@PathVariable Integer id)
     {
        return service.getEventById(id);
+    }
+
+    @PostMapping("/event")
+    boolean createEvent(@RequestBody Event event)
+    {
+        return service.createEvent(event);
+    }
+
+    @PutMapping("/event")
+    boolean updateEvent(@RequestBody Event event)
+    {
+        return service.createEvent(event);
     }
 }

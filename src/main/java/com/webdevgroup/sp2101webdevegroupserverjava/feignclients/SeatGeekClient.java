@@ -15,7 +15,7 @@ public interface SeatGeekClient {
     Events getAllEvents();
 
     @GetMapping("/events/{id}")
-    Event searchEventsById(@PathVariable("id") Integer id);
+    Event searchEventsById(@PathVariable("id") Long id);
 
     @GetMapping("/events")
     Events searchEvents(@RequestParam(value = "q")String query);

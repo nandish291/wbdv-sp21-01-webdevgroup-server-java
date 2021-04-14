@@ -1,15 +1,15 @@
 package com.webdevgroup.sp2101webdevegroupserverjava.services;
 
 import com.webdevgroup.sp2101webdevegroupserverjava.feignclients.SeatGeekClient;
-import com.webdevgroup.sp2101webdevegroupserverjava.models.Event;
-import com.webdevgroup.sp2101webdevegroupserverjava.models.Events;
-import com.webdevgroup.sp2101webdevegroupserverjava.models.Performer;
-import com.webdevgroup.sp2101webdevegroupserverjava.models.Venue;
+import com.webdevgroup.sp2101webdevegroupserverjava.models.*;
+import com.webdevgroup.sp2101webdevegroupserverjava.repository.CommentRepository;
 import com.webdevgroup.sp2101webdevegroupserverjava.repository.EventRepository;
 import com.webdevgroup.sp2101webdevegroupserverjava.repository.PerformerRepository;
 import com.webdevgroup.sp2101webdevegroupserverjava.repository.VenueRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 
 @Service
@@ -19,6 +19,7 @@ public class EventService{
     private final EventRepository repository;
     private final PerformerRepository performerRepository;
     private final VenueRepository venueRepository;
+    private final CommentRepository  commentRepository;
 
     public Events getAllEvents(){
         return client.getAllEvents();
@@ -28,11 +29,16 @@ public class EventService{
         return client.searchEvents(name);
 
     }
-    public Event getEventById(Integer id)
+    public EventDetails getEventById(Long id)
     {
-        Event event=client.searchEventsById(id);
+        Event event;
+        event=repository.findById(id).orElse(null);
+        if(event==null)
+            event=client.searchEventsById(id);
+        List<Comment> comments=commentRepository.findCommentByEvent_Id(event.getId());
+        EventDetails eventDetails=EventDetails.builder().event(event).comment(comments).build();
         if(event.getId()!=0)
-            return event;
+            return eventDetails;
         return null;
     }
 

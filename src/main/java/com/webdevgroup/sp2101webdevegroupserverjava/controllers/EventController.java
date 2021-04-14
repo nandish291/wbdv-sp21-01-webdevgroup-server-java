@@ -1,6 +1,7 @@
 package com.webdevgroup.sp2101webdevegroupserverjava.controllers;
 
 import com.webdevgroup.sp2101webdevegroupserverjava.models.Event;
+import com.webdevgroup.sp2101webdevegroupserverjava.models.EventDetails;
 import com.webdevgroup.sp2101webdevegroupserverjava.models.Events;
 import com.webdevgroup.sp2101webdevegroupserverjava.services.EventService;
 import lombok.RequiredArgsConstructor;
@@ -25,7 +26,7 @@ public class EventController {
     }
 
     @GetMapping("/event/{id}")
-    Event getEvent(@PathVariable Integer id)
+    EventDetails getEvent(@PathVariable Long id)
     {
        return service.getEventById(id);
     }

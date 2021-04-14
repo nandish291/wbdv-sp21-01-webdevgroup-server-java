@@ -28,7 +28,7 @@ public class UserController {
         User user = new User(name, username, password, confirmPassword, email);
         user.setUsername(username);
         user.setPassword(password);
-        session.setAttribute("currentUser", user);
+//        session.setAttribute("currentUser", user);
         service.createUser(name, username, password, confirmPassword, email);
         System.out.println("this line is reached");
         System.out.println(username);

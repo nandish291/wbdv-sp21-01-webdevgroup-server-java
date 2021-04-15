@@ -7,13 +7,11 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-public class StubHubConfig {
+public class SeatGeekConfig {
 
     @Bean
     public RequestInterceptor requestInterceptor() {
-        return requestTemplate -> {
-            requestTemplate.query("client_id","MjE2OTUwODJ8MTYxODA4NjcyNS44MzkzNTc2");
-        };
+        return requestTemplate -> requestTemplate.query("client_id","MjE2OTUwODJ8MTYxODA4NjcyNS44MzkzNTc2");
     }
 
 //    @Bean

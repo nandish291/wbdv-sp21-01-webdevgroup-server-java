@@ -24,8 +24,7 @@ public class UserService {
         return repository.findAllUsers();
     }
 
-    public User createUser(String name, String username, String password, String confirmPassword, String email) {
-        User user = new User(name, username, password, confirmPassword, email);
+    public User createUser(User user) {
         return repository.save(user);
     }
 }

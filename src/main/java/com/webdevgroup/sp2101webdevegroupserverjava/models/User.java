@@ -1,6 +1,7 @@
 package com.webdevgroup.sp2101webdevegroupserverjava.models;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 
 @Entity
 //@Table(name="users")
@@ -9,34 +10,74 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String name;
+    @NotBlank
+    private String firstName;
+    @NotBlank
+    private String lastName;
+    @NotBlank
+    private String dob;
+    @NotBlank
+    private String gender;
+    @Column(unique = true)
+    @NotBlank
     private String username;
+    @NotBlank
     private String password;
-    private String confirmPassword;
+    @Column(unique = true)
+    @NotBlank
     private String email;
 
-
-    public User(String name, String username, String password, String confirmPassword, String email) {
-        this.name = name;
+    public User(@NotBlank String firstName, @NotBlank String lastName, @NotBlank String dob, @NotBlank String gender, @NotBlank String username, @NotBlank String password, @NotBlank String email) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.dob = dob;
+        this.gender = gender;
         this.username = username;
         this.password = password;
-        this.confirmPassword = confirmPassword;
         this.email = email;
     }
 
     public User() {
+        this.firstName = "";
+        this.lastName = "";
+        this.dob = "";
+        this.gender = "";
         this.username = "";
         this.password = "";
-        this.name = "";
         this.email = "";
+
     }
 
-    public String getName() {
-        return name;
+    public String getFirstName() {
+        return firstName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public String getDob() {
+        return dob;
+    }
+
+    public void setDob(String dob) {
+        this.dob = dob;
+    }
+
+    public String getGender() {
+        return gender;
+    }
+
+    public void setGender(String gender) {
+        this.gender = gender;
     }
 
     public String getUsername() {
@@ -53,14 +94,6 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
-    }
-
-    public String getConfirmPassword() {
-        return confirmPassword;
-    }
-
-    public void setConfirmPassword(String confirmPassword) {
-        this.confirmPassword = confirmPassword;
     }
 
     public String getEmail() {

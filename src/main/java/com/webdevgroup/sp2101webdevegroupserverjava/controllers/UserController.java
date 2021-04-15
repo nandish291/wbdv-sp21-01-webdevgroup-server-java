@@ -17,24 +17,35 @@ public class UserController {
     @Autowired
     UserService service;
 
-    @PostMapping("/api/register/{name}/{username}/{password}/{confirmPassword}/{email}")
-    public User register(
-            @PathVariable("name") String name,
+    @PostMapping("/api/register/{username}")
+    public Integer register(
+            @RequestBody User user,
+            HttpSession session) {
+
+        if (service.findUserByUserName(user.getUsername()) != null) {
+            return -1;
+        }
+        service.createUser(user);
+        return 1;
+    }
+
+    @GetMapping("/api/login/{username}/{password}")
+    public boolean login(
             @PathVariable("username") String username,
             @PathVariable("password") String password,
-            @PathVariable("password") String confirmPassword,
-            @PathVariable("email") String email,
             HttpSession session) {
-        User user = new User(name, username, password, confirmPassword, email);
-        user.setUsername(username);
-        user.setPassword(password);
-//        session.setAttribute("currentUser", user);
-        service.createUser(name, username, password, confirmPassword, email);
-        System.out.println("this line is reached");
+        User user = service.findUserByUserName(username);
         System.out.println(username);
         System.out.println(password);
-        return user;
+        System.out.println(user.getPassword().equals(password));
+        if (user.getUsername().equals(username)
+                && user.getPassword().equals(password)) {
+            session.setAttribute("currentUser", user);
+            return true;
+        }
+        return false;
     }
+
 
     // TODO: must be sure that client is storing the same cookie, so maybe enable the credentials and select the specific CORS
     @GetMapping("/currentUser")
@@ -53,24 +64,6 @@ public class UserController {
     public void logout
             (HttpSession session) {
         session.invalidate();
-    }
-
-    //    //    TODO: This should actually use Post, not Get
-    @GetMapping("/api/login/{username}/{password}")
-    public boolean login(
-            @PathVariable("username") String username,
-            @PathVariable("password") String password,
-            HttpSession session) {
-        User user = service.findUserByUserName(username);
-        System.out.println(username);
-        System.out.println(password);
-        System.out.println(user.getPassword().equals(password));
-        if (user.getUsername().equals(username)
-                && user.getPassword().equals(password)) {
-            session.setAttribute("currentUser", user);
-            return true;
-        }
-        return false;
     }
 
 

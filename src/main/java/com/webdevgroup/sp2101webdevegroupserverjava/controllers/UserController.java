@@ -98,10 +98,10 @@ public class UserController {
     @DeleteMapping("/user/{uid}/delete_interested_event/{eid}")
     public User deleteEventFromInterestedForUser(
             @PathVariable("uid") Long uid,
-            @PathVariable("eid") Integer eid) {
+            @PathVariable("eid") Long eid) {
 
 
-        Event event=eventService.getEventById(eid);
+        Event event=eventService.getEventById(eid).getEvent();
         User user=service.findUserById(uid);
         user.getInterested().remove(event);
 
@@ -126,10 +126,10 @@ public class UserController {
     @DeleteMapping("/user/{uid}/delete_attended_event/{eid}")
     public User DeleteEventFromAttendingForUser(
             @PathVariable("uid") Long uid,
-            @PathVariable("eid") Integer eid) {
+            @PathVariable("eid") Long eid) {
 
 
-        Event event=eventService.getEventById(eid);
+        Event event=eventService.getEventById(eid).getEvent();
         User user=service.findUserById(uid);
         user.getAttending().remove(event);
 

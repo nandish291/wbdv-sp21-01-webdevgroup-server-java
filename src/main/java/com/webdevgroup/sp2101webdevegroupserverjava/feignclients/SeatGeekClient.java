@@ -14,9 +14,15 @@ public interface SeatGeekClient {
     @GetMapping("/events")
     Events getAllEvents();
 
+    @GetMapping("/events?sort=score.desc")
+    Events getTrendingEvents();
+
     @GetMapping("/events/{id}")
     Event searchEventsById(@PathVariable("id") Long id);
 
-    @GetMapping("/events")
+    @GetMapping("/events?sort=score.desc")
     Events searchEvents(@RequestParam(value = "q")String query);
+
+    @GetMapping("/events")
+    Events getEventsAroundVenue(@RequestParam(value = "venue.city")String venue);
 }

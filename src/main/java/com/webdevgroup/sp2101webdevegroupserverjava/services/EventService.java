@@ -25,6 +25,10 @@ public class EventService{
         return client.getAllEvents();
     }
 
+    public Events getTrendingEvents(){
+        return client.getTrendingEvents();
+    }
+
     public Events searchEvents(String name){
         return client.searchEvents(name);
 
@@ -60,5 +64,9 @@ public class EventService{
     public boolean updateEvent(Event event)
     {
         return true;
+    }
+
+    public Events getEventsAroundVenue(String venue) {
+        return client.getEventsAroundVenue(venue);
     }
 }

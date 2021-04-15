@@ -2,6 +2,7 @@ package com.webdevgroup.sp2101webdevegroupserverjava.controllers;
 
 import com.webdevgroup.sp2101webdevegroupserverjava.models.User;
 import com.webdevgroup.sp2101webdevegroupserverjava.services.UserService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -10,29 +11,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
-//@CrossOrigin(origins = "*")
-@CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
+@CrossOrigin(origins = "*")
+@RequiredArgsConstructor
 public class UserController {
 
-    @Autowired
-    UserService service;
+    private final UserService service;
 
-    @PostMapping("/api/register/{name}/{username}/{password}/{confirmPassword}/{email}")
-    public User register(
-            @PathVariable("name") String name,
-            @PathVariable("username") String username,
-            @PathVariable("password") String password,
-            @PathVariable("password") String confirmPassword,
-            @PathVariable("email") String email,
+    @PostMapping("/user/register/")
+    public User register(@RequestBody User user,
             HttpSession session) {
-        User user = new User(name, username, password, confirmPassword, email);
-        user.setUsername(username);
-        user.setPassword(password);
-//        session.setAttribute("currentUser", user);
-        service.createUser(name, username, password, confirmPassword, email);
-        System.out.println("this line is reached");
-        System.out.println(username);
-        System.out.println(password);
+        service.createUser(user);
         return user;
     }
 
@@ -65,7 +53,7 @@ public class UserController {
         System.out.println(username);
         System.out.println(password);
         System.out.println(user.getPassword().equals(password));
-        if (user.getUsername().equals(username)
+        if (user.getUserName().equals(username)
                 && user.getPassword().equals(password)) {
             session.setAttribute("currentUser", user);
             return true;
@@ -73,27 +61,4 @@ public class UserController {
         return false;
     }
 
-
-//    @GetMapping("/api/session/set/{attr}/{value}")
-//    public String setSessionAttribute(
-//            @PathVariable("attr") String attr,
-//            @PathVariable("value") String value,
-//            HttpSession session) {
-//        session.setAttribute(attr, value);
-//        return attr + " = " + value;
-//    }
-//
-//    @GetMapping("/api/session/get/{attr}")
-//    public String getSessionAttribute(
-//            @PathVariable("attr") String attr,
-//            HttpSession session) {
-//        return (String) session.getAttribute(attr);
-//    }
-//
-//    @GetMapping("/api/session/invalidate")
-//    public String invalidateSession(
-//            HttpSession session) {
-//        session.invalidate();
-//        return "session invalidated";
-//    }
 }

@@ -37,6 +37,11 @@ public class User {
         this.email = email;
     }
 
+    public User(String username, String password) {
+        this.username = "";
+        this.password = "";
+    }
+
     public User() {
         this.firstName = "";
         this.lastName = "";

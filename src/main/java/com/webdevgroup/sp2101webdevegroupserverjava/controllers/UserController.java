@@ -1,6 +1,7 @@
 package com.webdevgroup.sp2101webdevegroupserverjava.controllers;
 
 import com.webdevgroup.sp2101webdevegroupserverjava.models.User;
+import com.webdevgroup.sp2101webdevegroupserverjava.models.UserLogin;
 import com.webdevgroup.sp2101webdevegroupserverjava.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -29,28 +30,34 @@ public class UserController {
         return 1;
     }
 
-    @GetMapping("/api/login/{username}/{password}")
-    public boolean login(
-            @PathVariable("username") String username,
-            @PathVariable("password") String password,
+    @PostMapping("/api/login")
+    public Integer login(
+            @RequestBody UserLogin user,
             HttpSession session) {
-        User user = service.findUserByUserName(username);
-        System.out.println(username);
-        System.out.println(password);
-        System.out.println(user.getPassword().equals(password));
-        if (user.getUsername().equals(username)
-                && user.getPassword().equals(password)) {
-            session.setAttribute("currentUser", user);
-            return true;
+
+        // user does not exist
+        User registeredUser = service.findUserByUserName(user.getUsername());
+        if (registeredUser.getUsername() == null) {
+            return -1;
         }
-        return false;
+
+        // login successful
+        if (registeredUser.getUsername().equals(user.getUsername())
+                && registeredUser.getPassword().equals(user.getPassword())) {
+            session.setAttribute("currentUser", registeredUser);
+            return 1;
+        } else {
+
+            // username and password don't match
+            return 0;
+        }
     }
 
 
     // TODO: must be sure that client is storing the same cookie, so maybe enable the credentials and select the specific CORS
     @GetMapping("/currentUser")
     public User currentUser(HttpSession session) {
-        return (User)session.getAttribute("currentUser");
+        return (User) session.getAttribute("currentUser");
     }
 
     @GetMapping("/api/profile")

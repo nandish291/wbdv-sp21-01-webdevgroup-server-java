@@ -33,7 +33,7 @@ public class UserController {
             @RequestBody User user,
             HttpSession session) {
 
-        if (service.findUserByUserName(user.getUsername()) != null) {
+        if (service.findUserByUserName(user.getUserName()) != null) {
             return -1;
         }
         service.createUser(user);
@@ -48,12 +48,12 @@ public class UserController {
 
         // user does not exist
         User registeredUser = service.findUserByUserName(user.getUsername());
-        if (registeredUser.getUsername() == null) {
+        if (registeredUser.getUserName() == null) {
             return -1;
         }
 
         // login successful
-        if (registeredUser.getUsername().equals(user.getUsername())
+        if (registeredUser.getUserName().equals(user.getUsername())
                 && registeredUser.getPassword().equals(user.getPassword())) {
             session.setAttribute("currentUser", registeredUser);
             return 1;

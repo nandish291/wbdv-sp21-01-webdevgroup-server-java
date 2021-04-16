@@ -19,8 +19,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@CrossOrigin(origins = "*")
 @RequiredArgsConstructor
+@CrossOrigin(origins = {"http://localhost:3000","https://wbdv-client-react-s1.herokuapp.com/"},allowCredentials = "true")
 public class UserController {
 
     @Autowired

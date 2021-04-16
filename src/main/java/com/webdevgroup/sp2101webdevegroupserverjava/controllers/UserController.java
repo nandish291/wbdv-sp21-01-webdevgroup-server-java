@@ -1,22 +1,32 @@
 package com.webdevgroup.sp2101webdevegroupserverjava.controllers;
-
 import com.webdevgroup.sp2101webdevegroupserverjava.models.User;
 import com.webdevgroup.sp2101webdevegroupserverjava.models.UserLogin;
 import com.webdevgroup.sp2101webdevegroupserverjava.services.UserService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.List;
+import com.webdevgroup.sp2101webdevegroupserverjava.models.Event;
+import com.webdevgroup.sp2101webdevegroupserverjava.models.User;
+import com.webdevgroup.sp2101webdevegroupserverjava.services.EventService;
+import com.webdevgroup.sp2101webdevegroupserverjava.services.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
-//@CrossOrigin(origins = "*")
-@CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
+@CrossOrigin(origins = "*")
+@RequiredArgsConstructor
 public class UserController {
 
     @Autowired
     UserService service;
+    @Autowired
+    EventService eventService;
 
     @PostMapping("/api/register/{username}")
     public Integer register(
@@ -28,6 +38,7 @@ public class UserController {
         }
         service.createUser(user);
         return 1;
+
     }
 
     @PostMapping("/api/login")
@@ -73,27 +84,66 @@ public class UserController {
         session.invalidate();
     }
 
+    //chayank
+    @GetMapping("/user/{uid}")
+    User getEvent(@PathVariable Long uid)
+    {
+        return service.findUserById(uid);
+    }
 
-//    @GetMapping("/api/session/set/{attr}/{value}")
-//    public String setSessionAttribute(
-//            @PathVariable("attr") String attr,
-//            @PathVariable("value") String value,
-//            HttpSession session) {
-//        session.setAttribute(attr, value);
-//        return attr + " = " + value;
-//    }
-//
-//    @GetMapping("/api/session/get/{attr}")
-//    public String getSessionAttribute(
-//            @PathVariable("attr") String attr,
-//            HttpSession session) {
-//        return (String) session.getAttribute(attr);
-//    }
-//
-//    @GetMapping("/api/session/invalidate")
-//    public String invalidateSession(
-//            HttpSession session) {
-//        session.invalidate();
-//        return "session invalidated";
-//    }
+    @PutMapping("/user/{uid}/add_interested_event")
+    public User addEventToInterestedForUser(
+            @PathVariable("uid") Long uid,
+            @RequestBody Event event
+    ) {
+
+        User user=service.findUserById(uid);
+
+        eventService.createEvent(event);
+
+        user.getInterested().add(event);
+
+        return service.updateUser(user);
+    }
+
+    @DeleteMapping("/user/{uid}/delete_interested_event/{eid}")
+    public User deleteEventFromInterestedForUser(
+            @PathVariable("uid") Long uid,
+            @PathVariable("eid") Long eid) {
+
+
+        Event event=eventService.getEventById(eid).getEvent();
+        User user=service.findUserById(uid);
+        user.getInterested().remove(event);
+
+        return service.updateUser(user);
+    }
+
+    @PutMapping("/user/{uid}/add_attended_event")
+    public User AddEventToAttendingForUser(
+            @PathVariable("uid") Long uid,
+            @RequestBody Event event
+    ) {
+
+        User user=service.findUserById(uid);
+
+        eventService.createEvent(event);
+
+        user.getAttending().add(event);
+
+        return service.updateUser(user);
+    }
+
+    @DeleteMapping("/user/{uid}/delete_attended_event/{eid}")
+    public User DeleteEventFromAttendingForUser(
+            @PathVariable("uid") Long uid,
+            @PathVariable("eid") Long eid) {
+
+
+        Event event=eventService.getEventById(eid).getEvent();
+        User user=service.findUserById(uid);
+        user.getAttending().remove(event);
+
+        return service.updateUser(user);
+    }
 }

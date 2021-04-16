@@ -39,7 +39,7 @@ public class EventService{
         event=repository.findById(id).orElse(null);
         if(event==null)
             event=client.searchEventsById(id);
-        List<Comment> comments=commentRepository.findCommentByEvent_Id(event.getId());
+        List<Comment> comments=commentRepository.findCommentsForEvent(event.getId());
         EventDetails eventDetails=EventDetails.builder().event(event).comment(comments).build();
         if(event.getId()!=0)
             return eventDetails;

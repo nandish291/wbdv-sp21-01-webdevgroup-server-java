@@ -7,6 +7,8 @@ import com.webdevgroup.sp2101webdevegroupserverjava.repository.EventRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @RequiredArgsConstructor
 @Service
 public class CommentService {
@@ -15,14 +17,25 @@ public class CommentService {
     private final EventRepository    eventRepository;
     private final EventService eventService;
 
-    public boolean addComment(Comment comment)
+    public List<Comment> addComment(Comment comment)
     {
         Event event=eventRepository.findById(comment.getEvent().getId()).orElse(null);
         if(event==null)
             eventService.createEvent(comment.getEvent());
         Comment comment1=commentRepository.save(comment);
-        if(comment1!=null)
-            return true;
-        return false;
+        return commentRepository.findCommentsForEvent(comment.getEvent().getId());
+    }
+
+    public List<Comment> findCommentsForEvent(Long eid) {
+        return commentRepository.findCommentsForEvent(eid);
+    }
+
+    public boolean updateComment(Comment comment)
+    {
+        //hardcode like update
+        Comment comment1=commentRepository.findById(comment.getId()).get();
+        comment1.setLikes(comment1.getLikes()+1);
+        commentRepository.save(comment1);
+        return true;
     }
 }

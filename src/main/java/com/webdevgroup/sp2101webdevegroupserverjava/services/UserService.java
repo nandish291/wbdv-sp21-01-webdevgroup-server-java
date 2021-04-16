@@ -24,7 +24,7 @@ public class UserService {
     UserRepository repository;
 
     public User findUserById(Long id) {
-        return repository.findUserById(id);
+        return repository.findById(id).orElse(null);
     }
     public User findUserByUserName(String username) {
         return repository.findUserByUserName(username);

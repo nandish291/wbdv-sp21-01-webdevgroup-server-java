@@ -96,5 +96,4 @@ public class UserController {
 //        session.invalidate();
 //        return "session invalidated";
 //    }
-
 }

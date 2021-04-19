@@ -5,6 +5,8 @@ import com.webdevgroup.sp2101webdevegroupserverjava.models.EventDetails;
 import com.webdevgroup.sp2101webdevegroupserverjava.models.Events;
 import com.webdevgroup.sp2101webdevegroupserverjava.services.EventService;
 import lombok.RequiredArgsConstructor;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 

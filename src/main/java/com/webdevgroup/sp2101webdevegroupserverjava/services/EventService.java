@@ -25,6 +25,10 @@ public class EventService{
         return client.getAllEvents();
     }
 
+    public Events getTrendingEvents(){
+        return client.getTrendingEvents();
+    }
+
     public Events searchEvents(String name){
         return client.searchEvents(name);
 
@@ -35,7 +39,7 @@ public class EventService{
         event=repository.findById(id).orElse(null);
         if(event==null)
             event=client.searchEventsById(id);
-        List<Comment> comments=commentRepository.findCommentByEvent_Id(event.getId());
+        List<Comment> comments=commentRepository.findCommentsForEvent(event.getId());
         EventDetails eventDetails=EventDetails.builder().event(event).comment(comments).build();
         if(event.getId()!=0)
             return eventDetails;
@@ -60,5 +64,9 @@ public class EventService{
     public boolean updateEvent(Event event)
     {
         return true;
+    }
+
+    public Events getEventsAroundVenue(String venue) {
+        return client.getEventsAroundVenue(venue);
     }
 }

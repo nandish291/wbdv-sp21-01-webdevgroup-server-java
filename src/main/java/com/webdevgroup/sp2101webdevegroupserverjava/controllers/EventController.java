@@ -22,6 +22,16 @@ public class EventController {
         return service.getAllEvents();
     }
 
+    @GetMapping("/events/trending")
+    Events getTrendingEvents(){
+        return service.getTrendingEvents();
+    }
+
+    @GetMapping("/events/venue/{venue}")
+    Events getEventsAroundVenue(@PathVariable String venue){
+        return service.getEventsAroundVenue(venue);
+    }
+
     @GetMapping("/search")
     Events searchEvents(@RequestParam String name){
         return service.searchEvents(name);

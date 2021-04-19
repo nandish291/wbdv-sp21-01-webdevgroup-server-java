@@ -1,5 +1,6 @@
 package com.webdevgroup.sp2101webdevegroupserverjava.models;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,26 +17,34 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "users")
+//@Table(name = "users")
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @NotBlank
-    @Column(unique = true)
-    private String userName;
-    @NotBlank
-    private String firstName;
-    @NotBlank
-    private String lastName;
-    @NotBlank
-    private String password;
     @NotNull
+    private String firstname;
+    @NotBlank
+    @NotNull
+    private String lastname;
+    @NotBlank
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private Date dob;
     @NotBlank
-    private String type;
-    @ManyToMany
-    private List<Event> interested;
-    @ManyToMany
-    private List<Event> attending;
+    private String gender;
+    @NotBlank
+    @NotNull
+    @Column(unique = true)
+    private String username;
+    @NotBlank
+    private String password;
+    @NotBlank
+    private String email;
+//    @NotBlank
+//    private String type;
+//    @ManyToMany
+//    private List<Event> interested;
+//    @ManyToMany
+//    private List<Event> attending;
 }

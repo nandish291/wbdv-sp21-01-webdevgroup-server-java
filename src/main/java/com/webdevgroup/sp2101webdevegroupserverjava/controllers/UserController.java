@@ -53,8 +53,6 @@ public class UserController {
         }
     }
 
-
-    // TODO: must be sure that client is storing the same cookie, so maybe enable the credentials and select the specific CORS
     @GetMapping("/currentUser")
     public User currentUser(HttpSession session) {
         return (User) session.getAttribute("currentUser");
@@ -67,33 +65,9 @@ public class UserController {
         return currentUser;
     }
 
-    @GetMapping("/api/logout")
+    @PostMapping("/api/logout")
     public void logout
             (HttpSession session) {
         session.invalidate();
     }
-
-
-//    @GetMapping("/api/session/set/{attr}/{value}")
-//    public String setSessionAttribute(
-//            @PathVariable("attr") String attr,
-//            @PathVariable("value") String value,
-//            HttpSession session) {
-//        session.setAttribute(attr, value);
-//        return attr + " = " + value;
-//    }
-//
-//    @GetMapping("/api/session/get/{attr}")
-//    public String getSessionAttribute(
-//            @PathVariable("attr") String attr,
-//            HttpSession session) {
-//        return (String) session.getAttribute(attr);
-//    }
-//
-//    @GetMapping("/api/session/invalidate")
-//    public String invalidateSession(
-//            HttpSession session) {
-//        session.invalidate();
-//        return "session invalidated";
-//    }
 }

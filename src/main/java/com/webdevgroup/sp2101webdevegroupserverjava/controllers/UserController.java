@@ -18,7 +18,7 @@ import com.webdevgroup.sp2101webdevegroupserverjava.services.EventService;
 
 @RestController
 @RequiredArgsConstructor
-@CrossOrigin(origins = {"http://localhost:3000","https://wbdv-client-react-s1.herokuapp.com/"},allowCredentials = "true")
+@CrossOrigin(origins = {"http://localhost:3000","https://wbdv-client-react-s1.herokuapp.com"},allowCredentials = "true")
 public class UserController {
 
     @Autowired
@@ -33,7 +33,7 @@ public class UserController {
             @RequestBody User user,
             HttpSession session) {
 
-        if (service.findUserByUserName(user.getUserName()) != null) {
+        if (service.findUserByUserName(user.getUsername()) != null) {
             return -1;
         }
         user.setType("USER");

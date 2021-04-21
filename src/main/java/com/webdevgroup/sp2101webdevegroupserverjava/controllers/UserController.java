@@ -33,7 +33,7 @@ public class UserController {
             @RequestBody User user,
             HttpSession session) {
 
-        if (service.findUserByUserName(user.getUserName()) != null) {
+        if (service.findUserByUserName(user.getUsername()) != null) {
             return -1;
         }
         user.setType("USER");

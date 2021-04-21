@@ -10,15 +10,15 @@ import java.util.List;
 public interface UserRepository
         extends CrudRepository<User, Long> {
     //    @Query(value="SELECT * FROM user", nativeQuery = true)
-    @Query(value="SELECT user FROM User user", nativeQuery = true)
-    public List<User> findAllUsers();
+//    @Query(value="SELECT user FROM User user", nativeQuery = true)
+//    public List<User> findAll();
 
-    @Query(value="SELECT * FROM user WHERE id=:uid", nativeQuery = true)
-    public User findUserById(@Param("uid") Long userId);
+//    @Query(value="SELECT * FROM user WHERE id=:uid", nativeQuery = true)
+//    public User findUserById(@Param("uid") Long userId);
+//
+//    @Query(value="SELECT * FROM user WHERE username=:username", nativeQuery = true)
+//    public User findUserByUserName(@Param("username") String username);
 
-    @Query(value="SELECT * FROM user WHERE username=:username", nativeQuery = true)
-    public User findUserByUserName(@Param("username") String username);
-
-    public User findByUsername(String username);
+    User findByUsername(String username);
 
 }

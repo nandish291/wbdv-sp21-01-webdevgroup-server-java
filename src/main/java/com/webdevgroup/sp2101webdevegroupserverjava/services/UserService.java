@@ -3,16 +3,8 @@ package com.webdevgroup.sp2101webdevegroupserverjava.services;
 import com.webdevgroup.sp2101webdevegroupserverjava.models.User;
 import com.webdevgroup.sp2101webdevegroupserverjava.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import com.webdevgroup.sp2101webdevegroupserverjava.models.User;
-import com.webdevgroup.sp2101webdevegroupserverjava.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import com.webdevgroup.sp2101webdevegroupserverjava.models.User;
-import com.webdevgroup.sp2101webdevegroupserverjava.repository.UserRepository;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 import java.util.List;
 
@@ -27,11 +19,11 @@ public class UserService {
         return repository.findById(id).orElse(null);
     }
     public User findUserByUserName(String username) {
-        return repository.findUserByUserName(username);
+        return repository.findByUsername(username);
     }
 
     public List<User> findAllUsers() {
-        return repository.findAllUsers();
+        return (List<User>)repository.findAll();
     }
 
     public User createUser(User user) {

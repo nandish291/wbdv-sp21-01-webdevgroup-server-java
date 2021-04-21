@@ -9,6 +9,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.sql.Date;
 import java.util.List;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -22,7 +23,7 @@ public class Event{
     private Date datetime_local;
     @ManyToMany
     @NotNull
-    private List<Performer> performers;
+    private Set<Performer> performers;
     @ManyToOne(cascade = CascadeType.ALL)
     @NotNull
     private Venue venue;

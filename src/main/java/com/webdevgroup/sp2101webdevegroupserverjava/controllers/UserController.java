@@ -1,22 +1,20 @@
 package com.webdevgroup.sp2101webdevegroupserverjava.controllers;
+
+import com.webdevgroup.sp2101webdevegroupserverjava.mapper.UserUserBasicMapper;
+import com.webdevgroup.sp2101webdevegroupserverjava.models.Event;
 import com.webdevgroup.sp2101webdevegroupserverjava.models.User;
+import com.webdevgroup.sp2101webdevegroupserverjava.models.UserBasic;
 import com.webdevgroup.sp2101webdevegroupserverjava.models.UserLogin;
 import com.webdevgroup.sp2101webdevegroupserverjava.services.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
-import java.util.ArrayList;
-import java.util.List;
-import com.webdevgroup.sp2101webdevegroupserverjava.models.Event;
-import com.webdevgroup.sp2101webdevegroupserverjava.models.User;
 import com.webdevgroup.sp2101webdevegroupserverjava.services.EventService;
-import com.webdevgroup.sp2101webdevegroupserverjava.services.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -27,8 +25,10 @@ public class UserController {
     UserService service;
     @Autowired
     EventService eventService;
+    @Autowired
+    UserUserBasicMapper mapper;
 
-    @PostMapping("/api/register/{username}")
+    @PostMapping("/api/register")
     public Integer register(
             @RequestBody User user,
             HttpSession session) {
@@ -36,39 +36,33 @@ public class UserController {
         if (service.findUserByUserName(user.getUserName()) != null) {
             return -1;
         }
+        user.setType("USER");
         service.createUser(user);
         return 1;
-
     }
 
     @PostMapping("/api/login")
-    public Integer login(
+    public UserBasic login(
             @RequestBody UserLogin user,
             HttpSession session) {
 
-        // user does not exist
         User registeredUser = service.findUserByUserName(user.getUsername());
-        if (registeredUser.getUserName() == null) {
-            return -1;
-        }
+        if (registeredUser!=null && registeredUser.getUsername().equals(user.getUsername())
 
-        // login successful
-        if (registeredUser.getUserName().equals(user.getUsername())
                 && registeredUser.getPassword().equals(user.getPassword())) {
             session.setAttribute("currentUser", registeredUser);
-            return 1;
-        } else {
-
-            // username and password don't match
-            return 0;
+            return mapper.UserToUserBasic(registeredUser);
         }
+            // username and password don't match
+            return new UserBasic();
     }
 
-
-    // TODO: must be sure that client is storing the same cookie, so maybe enable the credentials and select the specific CORS
     @GetMapping("/currentUser")
-    public User currentUser(HttpSession session) {
-        return (User) session.getAttribute("currentUser");
+    public UserBasic currentUser(HttpSession session) {
+        User obj=(User)session.getAttribute("currentUser");
+        if(obj==null)
+            return new UserBasic();
+        return mapper.UserToUserBasic(obj);
     }
 
     @GetMapping("/api/profile")
@@ -78,7 +72,7 @@ public class UserController {
         return currentUser;
     }
 
-    @GetMapping("/api/logout")
+    @PostMapping("/api/logout")
     public void logout
             (HttpSession session) {
         session.invalidate();

@@ -85,6 +85,15 @@ public class UserController {
         return service.findUserById(uid);
     }
 
+    @PutMapping("/user/{uid}/update")
+    public User updateUser(
+            @PathVariable("uid") Long uid,
+            @RequestBody User user
+    ) {
+
+        return service.updateUser(user);
+    }
+
     @PutMapping("/user/{uid}/add_interested_event")
     public User addEventToInterestedForUser(
             @PathVariable("uid") Long uid,

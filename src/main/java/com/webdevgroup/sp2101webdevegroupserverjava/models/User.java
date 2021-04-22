@@ -26,10 +26,10 @@ public class User {
     private Long id;
     @NotBlank
     @NotNull
-    private String firstname;
+    private String firstName;
     @NotBlank
     @NotNull
-    private String lastname;
+    private String lastName;
     @NotBlank
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private Date dob;
@@ -38,7 +38,7 @@ public class User {
     @NotBlank
     @NotNull
     @Column(unique = true)
-    private String username;
+    private String userName;
     @NotBlank
     private String password;
     @NotBlank

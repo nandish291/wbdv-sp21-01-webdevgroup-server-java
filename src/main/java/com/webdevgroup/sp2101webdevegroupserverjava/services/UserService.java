@@ -19,7 +19,7 @@ public class UserService {
         return repository.findById(id).orElse(null);
     }
     public User findUserByUserName(String username) {
-        return repository.findByUsername(username);
+        return repository.findByUserName(username);
     }
 
     public List<User> findAllUsers() {

@@ -19,6 +19,6 @@ public interface UserRepository
 //    @Query(value="SELECT * FROM user WHERE username=:username", nativeQuery = true)
 //    public User findUserByUserName(@Param("username") String username);
 
-    User findByUsername(String username);
+    User findByUserName(String username);
 
 }

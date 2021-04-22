@@ -18,7 +18,7 @@ import com.webdevgroup.sp2101webdevegroupserverjava.services.EventService;
 
 @RestController
 @RequiredArgsConstructor
-@CrossOrigin(origins = {"http://localhost:3000","https://wbdv-client-react-s1.herokuapp.com"},allowCredentials = "true")
+@CrossOrigin(origins = {"http://localhost:3000","http://wbdv-client-react-s1.herokuapp.com"},allowCredentials = "true")
 public class UserController {
 
     @Autowired

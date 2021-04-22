@@ -12,11 +12,11 @@ import java.sql.Date;
 @NoArgsConstructor
 public class UserBasic {
     private Long id;
-    private String firstname;
-    private String lastname;
+    private String firstName;
+    private String lastName;
     private Date dob;
     private String gender;
-    private String username;
+    private String userName;
     private String email;
     private String type;
 

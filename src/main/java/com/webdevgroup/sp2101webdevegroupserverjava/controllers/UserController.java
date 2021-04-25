@@ -34,7 +34,8 @@ public class UserController {
     public ResponseEntity<Boolean> register(
             @RequestBody User user,
             HttpSession session) {
-        if (service.findUserByUserName(user.getUserName()) != null) {
+        if (service.findUserByUserName(user.getUserName()) != null
+        || service.findByEmail(user.getEmail())) {
             return new ResponseEntity<>(false,HttpStatus.BAD_REQUEST);
         }
         user.setType("USER");

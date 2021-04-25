@@ -1,13 +1,9 @@
 package com.webdevgroup.sp2101webdevegroupserverjava.controllers;
 
 import com.webdevgroup.sp2101webdevegroupserverjava.mapper.UserUserBasicMapper;
-import com.webdevgroup.sp2101webdevegroupserverjava.models.Event;
-import com.webdevgroup.sp2101webdevegroupserverjava.models.User;
-import com.webdevgroup.sp2101webdevegroupserverjava.models.UserBasic;
-import com.webdevgroup.sp2101webdevegroupserverjava.models.UserLogin;
+import com.webdevgroup.sp2101webdevegroupserverjava.models.*;
 import com.webdevgroup.sp2101webdevegroupserverjava.services.UserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,33 +11,38 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpSession;
 import com.webdevgroup.sp2101webdevegroupserverjava.services.EventService;
 
+import java.util.List;
+import java.util.Set;
+
 
 @RestController
 @RequiredArgsConstructor
 @CrossOrigin(origins = {"http://localhost:3000","http://wbdv-client-react-s1.herokuapp.com","https://wbdv-client-react-s1.herokuapp.com"},allowCredentials = "true")
 public class UserController {
 
-    @Autowired
-    UserService service;
-    @Autowired
-    EventService eventService;
-    @Autowired
-    UserUserBasicMapper mapper;
+    private final UserService service;
+    private final EventService eventService;
+    private final UserUserBasicMapper mapper;
 
-    @PostMapping("/api/register")
-    public Integer register(
+    @GetMapping("/users")
+    public List<UserBasic> getAllUsers()
+    {
+        return service.findAllUsers();
+    }
+
+    @PostMapping("/register")
+    public ResponseEntity<Boolean> register(
             @RequestBody User user,
             HttpSession session) {
-
         if (service.findUserByUserName(user.getUserName()) != null) {
-            return -1;
+            return new ResponseEntity<>(false,HttpStatus.BAD_REQUEST);
         }
         user.setType("USER");
         service.createUser(user);
-        return 1;
+        return new ResponseEntity<>(true,HttpStatus.OK);
     }
 
-    @PostMapping("/api/login")
+    @PostMapping("/login")
     public UserBasic login(
             @RequestBody UserLogin user,
             HttpSession session) {
@@ -57,7 +58,7 @@ public class UserController {
             return new UserBasic();
     }
 
-    @GetMapping("/currentUser")
+    @GetMapping("/currentuser")
     public UserBasic currentUser(HttpSession session) {
         User obj=(User)session.getAttribute("currentUser");
         if(obj==null)
@@ -65,14 +66,15 @@ public class UserController {
         return mapper.UserToUserBasic(obj);
     }
 
-    @GetMapping("/api/profile")
+    @GetMapping("/profile")
     public User profile(HttpSession session) {
         User currentUser = (User)
                 session.getAttribute("currentUser");
         return currentUser;
     }
 
-    @PostMapping("/api/logout")
+    @PostMapping("/logout")
+    @ResponseStatus(HttpStatus.OK)
     public void logout
             (HttpSession session) {
         session.invalidate();
@@ -148,5 +150,37 @@ public class UserController {
         user.getAttending().remove(event);
 
         return service.updateUser(user);
+    }
+
+    @GetMapping("/username/{username}")
+    public ResponseEntity<Boolean> checkUserName(@PathVariable("username")String userName)
+    {
+        User user= service.findUserByUserName(userName);
+        if(user!=null)
+            return new ResponseEntity<>(true,HttpStatus.BAD_REQUEST);
+        else
+            return new ResponseEntity<>(false,HttpStatus.OK);
+    }
+
+    @GetMapping("/email/{email}")
+    public ResponseEntity<Boolean> checkEmail(@PathVariable("email")String email)
+    {
+        if(service.findByEmail(email))
+            return new ResponseEntity<>(true,HttpStatus.BAD_REQUEST);
+        else
+            return new ResponseEntity<>(false,HttpStatus.OK);
+    }
+
+    @GetMapping("/user/events/{id}")
+    public EventBasic findEventsForUser(@PathVariable Long id)
+    {
+       return service.findEventsForUser(id);
+    }
+
+    @DeleteMapping("/user/{id}")
+    public Boolean deleteUser(@PathVariable Long id)
+    {
+        service.deleteUser(id);
+        return true;
     }
 }

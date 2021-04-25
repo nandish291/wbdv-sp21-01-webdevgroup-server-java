@@ -35,6 +35,12 @@ public class EventController {
         return service.searchEvents(name);
     }
 
+    @GetMapping("/recommendations/performer/{id}")
+    Events recommendationsByPerformer(@PathVariable Long id){ return service.getRecommendationsByPerformer(id);}
+
+    @GetMapping("/recommendations/event/{id}")
+    Events recommendationsByEvents(@PathVariable Long id){ return  service.getRecommendationsByEvent(id);}
+
     @GetMapping("/event/{id}")
     EventDetails getEvent(@PathVariable Long id)
     {

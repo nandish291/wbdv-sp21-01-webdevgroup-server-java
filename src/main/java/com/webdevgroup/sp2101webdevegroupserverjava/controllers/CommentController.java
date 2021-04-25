@@ -8,25 +8,25 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Set;
 
 @RequiredArgsConstructor
 @RestController
 @CrossOrigin(origins = {"http://localhost:3000","http://wbdv-client-react-s1.herokuapp.com"})
 public class CommentController {
 
-    @Autowired
-    CommentService service;
+    private final CommentService service;
 
 
     @GetMapping("/event/{eid}/comments")
-    public List<Comment>  getAllEvents(
+    public Set<Comment>  getAllEvents(
             @PathVariable("eid") Long eid){
         return service.findCommentsForEvent(eid);
     }
 
 
     @PostMapping("/event/comment")
-    public List<Comment> addComment(@RequestBody Comment comment)
+    public Set<Comment> addComment(@RequestBody Comment comment)
     {
 
         return service.addComment(comment);

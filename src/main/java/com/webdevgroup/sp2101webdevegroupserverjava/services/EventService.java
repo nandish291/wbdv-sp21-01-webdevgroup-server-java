@@ -9,7 +9,10 @@ import com.webdevgroup.sp2101webdevegroupserverjava.repository.VenueRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 
 @Service
@@ -29,6 +32,30 @@ public class EventService{
         return client.getTrendingEvents();
     }
 
+    public Events getRecommendationsByPerformer(Long id)
+    {
+        Event event=repository.findById(id).orElse(null);
+        Long pid=event.getPerformers().get(0).getId();
+        Root root=client.getEventsLikeByPerformer(pid.toString());
+        List<Recommendation> recommendations=root.recommendations;
+        Events events=new Events();
+        events.setEvents(new HashSet<>());
+        for(Recommendation recommendation:recommendations)
+            events.getEvents().add(recommendation.event);
+        return events;
+    }
+
+    public Events getRecommendationsByEvent(Long id)
+    {
+        Root root=client.getEventsLikeByEvent(id.toString());
+        List<Recommendation> recommendations=root.recommendations;
+        Events events=new Events();
+        events.setEvents(new HashSet<>());
+        for(Recommendation recommendation:recommendations)
+            events.getEvents().add(recommendation.event);
+        return events;
+    }
+
     public Events searchEvents(String name){
         return client.searchEvents(name);
 
@@ -39,7 +66,7 @@ public class EventService{
         event=repository.findById(id).orElse(null);
         if(event==null)
             event=client.searchEventsById(id);
-        List<Comment> comments=commentRepository.findCommentsForEvent(event.getId());
+        Set<Comment> comments=commentRepository.findCommentsForEvent(event.getId());
         EventDetails eventDetails=EventDetails.builder().event(event).comment(comments).build();
         if(event.getId()!=0)
             return eventDetails;

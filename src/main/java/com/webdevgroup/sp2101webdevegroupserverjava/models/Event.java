@@ -23,7 +23,7 @@ public class Event{
     private Date datetime_local;
     @ManyToMany
     @NotNull
-    private Set<Performer> performers;
+    private List<Performer> performers;
     @ManyToOne(cascade = CascadeType.ALL)
     @NotNull
     private Venue venue;

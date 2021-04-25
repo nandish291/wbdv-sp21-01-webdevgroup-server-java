@@ -1,19 +1,20 @@
 package com.webdevgroup.sp2101webdevegroupserverjava.services;
 
-import com.webdevgroup.sp2101webdevegroupserverjava.models.User;
+import com.webdevgroup.sp2101webdevegroupserverjava.mapper.UserUserBasicMapper;
+import com.webdevgroup.sp2101webdevegroupserverjava.models.*;
 import com.webdevgroup.sp2101webdevegroupserverjava.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
 public class UserService {
 
-    @Autowired
-    UserRepository repository;
+    private final UserRepository repository;
+    private final UserUserBasicMapper mapper;
 
     public User findUserById(Long id) {
         return repository.findById(id).orElse(null);
@@ -22,8 +23,12 @@ public class UserService {
         return repository.findByUserName(username);
     }
 
-    public List<User> findAllUsers() {
-        return (List<User>)repository.findAll();
+    public boolean findByEmail(String email){
+        return repository.findByEmail(email)!=null;
+    }
+
+    public List<UserBasic> findAllUsers() {
+        return mapper.UserToUserBasicSet((List<User>)repository.findAll());
     }
 
     public User createUser(User user) {
@@ -42,5 +47,24 @@ public class UserService {
 
         repository.save(user);
         return user;
+    }
+
+    public EventBasic findEventsForUser(Long id) {
+        EventBasic eventBasic=new EventBasic();
+        User user=repository.findById(id).orElse(null);
+        int i=0;
+        for(Event event:user.getAttending())
+        {
+            eventBasic.eventIds[i]=(event.getId());
+            eventBasic.eventNames[i]=event.getTitle();
+            i++;
+            if(i==2)
+                break;
+        }
+        return eventBasic;
+    }
+
+    public void deleteUser(Long id) {
+        repository.deleteById(id);
     }
 }

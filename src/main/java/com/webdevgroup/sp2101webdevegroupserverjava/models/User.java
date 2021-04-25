@@ -22,26 +22,23 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @NotBlank
     @NotNull
     private String firstName;
-    @NotBlank
     @NotNull
     private String lastName;
-    @NotBlank
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+    @NotNull
     private Date dob;
-    @NotBlank
+    @NotNull
     private String gender;
-    @NotBlank
     @NotNull
     @Column(unique = true)
     private String userName;
-    @NotBlank
+    @NotNull
     private String password;
-    @NotBlank
+    @NotNull
     private String email;
-    @NotBlank
+    @NotNull
     private String type;
     @ManyToMany
     private Set<Event> interested;

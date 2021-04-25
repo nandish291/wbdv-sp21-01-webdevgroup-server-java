@@ -14,4 +14,6 @@ public interface CommentRepository
         @Query(value = "SELECT * FROM comments WHERE event_id=:eid", nativeQuery = true)
         public Set<Comment> findCommentsForEvent(@Param("eid") Long eid);
 
+        public void deleteCommentByUserName(String userName);
+
 }

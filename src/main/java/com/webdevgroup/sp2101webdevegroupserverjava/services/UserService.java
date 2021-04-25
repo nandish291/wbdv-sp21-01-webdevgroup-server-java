@@ -2,6 +2,7 @@ package com.webdevgroup.sp2101webdevegroupserverjava.services;
 
 import com.webdevgroup.sp2101webdevegroupserverjava.mapper.UserUserBasicMapper;
 import com.webdevgroup.sp2101webdevegroupserverjava.models.*;
+import com.webdevgroup.sp2101webdevegroupserverjava.repository.CommentRepository;
 import com.webdevgroup.sp2101webdevegroupserverjava.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -14,6 +15,7 @@ import java.util.Set;
 public class UserService {
 
     private final UserRepository repository;
+    private final CommentRepository commentRepository;
     private final UserUserBasicMapper mapper;
 
     public User findUserById(Long id) {
@@ -65,6 +67,8 @@ public class UserService {
     }
 
     public void deleteUser(Long id) {
+        User user=repository.findById(id).orElse(null);
+        commentRepository.deleteCommentByUserName(user.getUserName());
         repository.deleteById(id);
     }
 }

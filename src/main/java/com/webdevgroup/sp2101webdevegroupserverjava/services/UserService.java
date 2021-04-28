@@ -41,12 +41,14 @@ public class UserService {
     //chayank
     public User updateUser(User user) {
 
-        if(!repository.findById(user.getId()).isPresent())
+        User updateUser=repository.findById(user.getId()).orElse(null);
+        if(updateUser==null)
         {
             //check user here
             return null;
         }
-
+        user.setAttending(updateUser.getAttending());
+        user.setInterested(updateUser.getInterested());
         repository.save(user);
         return user;
     }
@@ -68,7 +70,13 @@ public class UserService {
 
     public void deleteUser(Long id) {
         User user=repository.findById(id).orElse(null);
-        commentRepository.deleteCommentByUserName(user.getUserName());
+        List<Comment> comments= commentRepository.findCommentByUserName(user.getUserName());
+        for(Comment comment:comments)
+            commentRepository.deleteById(comment.getId());
         repository.deleteById(id);
+    }
+
+    public User findUserByEmail(String username) {
+        return repository.findByEmail(username);
     }
 }

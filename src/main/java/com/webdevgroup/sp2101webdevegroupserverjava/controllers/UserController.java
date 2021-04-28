@@ -38,7 +38,6 @@ public class UserController {
         || service.findByEmail(user.getEmail())) {
             return new ResponseEntity<>(false,HttpStatus.BAD_REQUEST);
         }
-        user.setType("USER");
         service.createUser(user);
         return new ResponseEntity<>(true,HttpStatus.OK);
     }
@@ -48,10 +47,18 @@ public class UserController {
             @RequestBody UserLogin user,
             HttpSession session) {
 
-        User registeredUser = service.findUserByUserName(user.getUsername());
-        if (registeredUser!=null && registeredUser.getUserName().equals(user.getUsername())
+        User registeredUser;
+        if(user.getUsername().matches("(.*)@(.*)\\.(.*)"))
+        {
+            registeredUser=service.findUserByEmail(user.getUsername());
+        }
+        else
+        {
+            registeredUser=service.findUserByUserName(user.getUsername());
+        }
 
-                && registeredUser.getPassword().equals(user.getPassword())) {
+
+        if (registeredUser!=null && registeredUser.getPassword().equals(user.getPassword())) {
             session.setAttribute("currentUser", registeredUser);
             return mapper.UserToUserBasic(registeredUser);
         }
@@ -88,9 +95,8 @@ public class UserController {
         return service.findUserById(uid);
     }
 
-    @PutMapping("/user/{uid}/update")
+    @PutMapping("/user/update")
     public User updateUser(
-            @PathVariable("uid") Long uid,
             @RequestBody User user
     ) {
 

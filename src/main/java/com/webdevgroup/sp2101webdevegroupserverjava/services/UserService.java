@@ -8,7 +8,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -48,7 +47,6 @@ public class UserService {
             return null;
         }
         user.setAttending(updateUser.getAttending());
-        user.setInterested(updateUser.getInterested());
         repository.save(user);
         return user;
     }
@@ -78,5 +76,39 @@ public class UserService {
 
     public User findUserByEmail(String username) {
         return repository.findByEmail(username);
+    }
+
+    public Boolean addFollow(Long userId, Long targetId) {
+        User user=repository.findById(userId).orElse(null);
+        User target=repository.findById(targetId).orElse(null);
+        if(user!=null && target !=null) {
+            user.getFollowing().add(target);
+            target.getFollowers().add(user);
+            repository.save(user);
+            repository.save(target);
+            return true;
+        }
+        return false;
+    }
+
+    public Boolean deleteFollow(Long userId, Long targetId) {
+        User user=repository.findById(userId).orElse(null);
+        User target=repository.findById(targetId).orElse(null);
+        if(user!=null && target !=null) {
+            user.getFollowing().remove(target);
+            target.getFollowers().remove(user);
+            repository.save(user);
+            repository.save(target);
+            return true;
+        }
+        return false;
+    }
+
+    public UserDetails getUserDetails(Long userId) {
+        UserDetails userDetails=new UserDetails();
+        userDetails.setUser(repository.findById(userId).orElse(null));
+        userDetails.setFollowers(repository.findById(userId).orElse(null).getFollowers());
+        userDetails.setFollowing(repository.findById(userId).orElse(null).getFollowing());
+        return userDetails;
     }
 }

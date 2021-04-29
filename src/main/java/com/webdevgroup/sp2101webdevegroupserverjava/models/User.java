@@ -1,13 +1,13 @@
 package com.webdevgroup.sp2101webdevegroupserverjava.models;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.sql.Date;
 import java.util.Set;
@@ -41,7 +41,14 @@ public class User {
     @NotNull
     private String type;
     @ManyToMany
-    private Set<Event> interested;
-    @ManyToMany
     private Set<Event> attending;
+    @OneToMany(cascade =CascadeType.ALL)
+    @JsonIgnore
+    private Set<Comment> comments;
+    @ManyToMany
+    @JsonIgnore
+    private Set<User> followers;
+    @ManyToMany
+    @JsonIgnore
+    private Set<User> following;
 }

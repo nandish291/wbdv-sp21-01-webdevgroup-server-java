@@ -1,5 +1,6 @@
 package com.webdevgroup.sp2101webdevegroupserverjava.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -33,4 +34,7 @@ public class Event{
     private String type;
     private int likes;
     private int attending;
+    @OneToMany
+    @JsonIgnore
+    private Set<Comment> comments;
 }

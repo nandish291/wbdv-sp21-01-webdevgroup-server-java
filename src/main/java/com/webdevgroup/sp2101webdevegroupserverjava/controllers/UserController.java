@@ -103,33 +103,6 @@ public class UserController {
         return service.updateUser(user);
     }
 
-    @PutMapping("/user/{uid}/add_interested_event")
-    public User addEventToInterestedForUser(
-            @PathVariable("uid") Long uid,
-            @RequestBody Event event
-    ) {
-
-        User user=service.findUserById(uid);
-
-        eventService.createEvent(event);
-
-        user.getInterested().add(event);
-
-        return service.updateUser(user);
-    }
-
-    @DeleteMapping("/user/{uid}/delete_interested_event/{eid}")
-    public User deleteEventFromInterestedForUser(
-            @PathVariable("uid") Long uid,
-            @PathVariable("eid") Long eid) {
-
-
-        Event event=eventService.getEventById(eid).getEvent();
-        User user=service.findUserById(uid);
-        user.getInterested().remove(event);
-
-        return service.updateUser(user);
-    }
 
     @PutMapping("/user/{uid}/add_attended_event")
     public User AddEventToAttendingForUser(
@@ -189,5 +162,23 @@ public class UserController {
     {
         service.deleteUser(id);
         return true;
+    }
+
+    @PostMapping("/user/follow/{userId}/{targetId}")
+    public Boolean addFollow(@PathVariable Long userId,@PathVariable Long targetId)
+    {
+        return service.addFollow(userId,targetId);
+    }
+
+    @PostMapping("/user/unfollow/{userId}/{targetId}")
+    public Boolean deleteFollow(@PathVariable Long userId,@PathVariable Long targetId)
+    {
+        return service.deleteFollow(userId,targetId);
+    }
+
+    @GetMapping("/user/details/{userId}")
+    public UserDetails getUserDetails(@PathVariable Long userId)
+    {
+        return service.getUserDetails(userId);
     }
 }

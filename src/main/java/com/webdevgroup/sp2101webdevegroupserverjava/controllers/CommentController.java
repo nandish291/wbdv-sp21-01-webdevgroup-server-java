@@ -26,7 +26,7 @@ public class CommentController {
 
 
     @PostMapping("/event/comment")
-    public Set<Comment> addComment(@RequestBody Comment comment)
+    public Comment addComment(@RequestBody Comment comment)
     {
 
         return service.addComment(comment);

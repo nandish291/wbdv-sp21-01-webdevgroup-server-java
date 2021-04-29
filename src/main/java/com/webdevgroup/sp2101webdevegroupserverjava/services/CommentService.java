@@ -18,13 +18,13 @@ public class CommentService {
     private final EventRepository    eventRepository;
     private final EventService eventService;
 
-    public Set<Comment> addComment(Comment comment)
+    public Comment addComment(Comment comment)
     {
         Event event=eventRepository.findById(comment.getEvent().getId()).orElse(null);
         if(event==null)
             eventService.createEvent(comment.getEvent());
         Comment comment1=commentRepository.save(comment);
-        return commentRepository.findCommentsForEvent(comment.getEvent().getId());
+        return comment1;
     }
 
     public Set<Comment> findCommentsForEvent(Long eid) {

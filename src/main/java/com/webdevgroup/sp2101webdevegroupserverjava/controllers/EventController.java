@@ -7,6 +7,9 @@ import com.webdevgroup.sp2101webdevegroupserverjava.services.EventService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+import java.util.Set;
+
 
 @RestController
 @RequiredArgsConstructor
@@ -35,12 +38,6 @@ public class EventController {
         return service.searchEvents(name);
     }
 
-    @GetMapping("/recommendations/performer/{id}")
-    Events recommendationsByPerformer(@PathVariable Long id){ return service.getRecommendationsByPerformer(id);}
-
-    @GetMapping("/recommendations/event/{id}")
-    Events recommendationsByEvents(@PathVariable Long id){ return  service.getRecommendationsByEvent(id);}
-
     @GetMapping("/event/{id}")
     EventDetails getEvent(@PathVariable Long id)
     {
@@ -57,5 +54,11 @@ public class EventController {
     boolean updateEvent(@RequestBody Event event)
     {
         return service.createEvent(event);
+    }
+
+    @GetMapping("/events/recommendations/{userId}")
+    Set<Event> getRecommendationsForUser(@PathVariable Long userId)
+    {
+        return service.getRecommendationsForUser(userId);
     }
 }

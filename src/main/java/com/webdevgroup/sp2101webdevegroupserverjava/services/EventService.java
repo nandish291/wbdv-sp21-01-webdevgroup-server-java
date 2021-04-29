@@ -2,10 +2,7 @@ package com.webdevgroup.sp2101webdevegroupserverjava.services;
 
 import com.webdevgroup.sp2101webdevegroupserverjava.feignclients.SeatGeekClient;
 import com.webdevgroup.sp2101webdevegroupserverjava.models.*;
-import com.webdevgroup.sp2101webdevegroupserverjava.repository.CommentRepository;
-import com.webdevgroup.sp2101webdevegroupserverjava.repository.EventRepository;
-import com.webdevgroup.sp2101webdevegroupserverjava.repository.PerformerRepository;
-import com.webdevgroup.sp2101webdevegroupserverjava.repository.VenueRepository;
+import com.webdevgroup.sp2101webdevegroupserverjava.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -23,6 +20,7 @@ public class EventService{
     private final PerformerRepository performerRepository;
     private final VenueRepository venueRepository;
     private final CommentRepository  commentRepository;
+    private final UserRepository userRepository;
 
     public Events getAllEvents(){
         return client.getAllEvents();
@@ -32,29 +30,6 @@ public class EventService{
         return client.getTrendingEvents();
     }
 
-    public Events getRecommendationsByPerformer(Long id)
-    {
-        Event event=repository.findById(id).orElse(null);
-        Long pid=event.getPerformers().get(0).getId();
-        Root root=client.getEventsLikeByPerformer(pid.toString());
-        List<Recommendation> recommendations=root.recommendations;
-        Events events=new Events();
-        events.setEvents(new HashSet<>());
-        for(Recommendation recommendation:recommendations)
-            events.getEvents().add(recommendation.event);
-        return events;
-    }
-
-    public Events getRecommendationsByEvent(Long id)
-    {
-        Root root=client.getEventsLikeByEvent(id.toString());
-        List<Recommendation> recommendations=root.recommendations;
-        Events events=new Events();
-        events.setEvents(new HashSet<>());
-        for(Recommendation recommendation:recommendations)
-            events.getEvents().add(recommendation.event);
-        return events;
-    }
 
     public Events searchEvents(String name){
         return client.searchEvents(name);
@@ -95,5 +70,23 @@ public class EventService{
 
     public Events getEventsAroundVenue(String venue) {
         return client.getEventsAroundVenue(venue);
+    }
+
+    public Set<Event> getRecommendationsForUser(Long userId) {
+        List<Event> events= userRepository.findById(userId).orElse(null).getAttending();
+        Set<Event> reEvents=new HashSet<>();
+        int i=events.size()-1;
+        while (i>=0)
+        {
+            Root temp=client.getEventsLikeByEvent(events.get((i)).getId().toString());
+            if(reEvents.size()<5) {
+                for (Recommendation r : temp.getRecommendations()) {
+                    if(!reEvents.contains(r.getEvent()))
+                        reEvents.add(r.getEvent());
+                }
+            }
+            i--;
+        }
+        return reEvents;
     }
 }

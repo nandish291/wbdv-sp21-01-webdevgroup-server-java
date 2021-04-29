@@ -52,21 +52,6 @@ public class UserService {
         return user;
     }
 
-    public EventBasic findEventsForUser(Long id) {
-        EventBasic eventBasic=new EventBasic();
-        User user=repository.findById(id).orElse(null);
-        int i=0;
-        for(Event event:user.getAttending())
-        {
-            eventBasic.eventIds[i]=(event.getId());
-            eventBasic.eventNames[i]=event.getTitle();
-            i++;
-            if(i==2)
-                break;
-        }
-        return eventBasic;
-    }
-
     public void deleteUser(Long id) {
         User user=repository.findById(id).orElse(null);
         List<Comment> comments= commentRepository.findCommentByUserName(user.getUserName());
@@ -79,7 +64,7 @@ public class UserService {
         return repository.findByEmail(username);
     }
 
-    public Set<User> addFollow(Long userId, Long targetId) {
+    public List<User> addFollow(Long userId, Long targetId) {
         User user=repository.findById(userId).orElse(null);
         User target=repository.findById(targetId).orElse(null);
             user.getFollowing().add(target);
@@ -89,7 +74,7 @@ public class UserService {
             return target.getFollowers();
     }
 
-    public Set<User> deleteFollow(Long userId, Long targetId) {
+    public List<User> deleteFollow(Long userId, Long targetId) {
         User user=repository.findById(userId).orElse(null);
         User target=repository.findById(targetId).orElse(null);
             user.getFollowing().remove(target);

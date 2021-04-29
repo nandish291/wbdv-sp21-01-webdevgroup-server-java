@@ -10,6 +10,7 @@ import lombok.Setter;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.sql.Date;
+import java.util.List;
 import java.util.Set;
 
 @Getter
@@ -41,14 +42,14 @@ public class User {
     @NotNull
     private String type;
     @ManyToMany
-    private Set<Event> attending;
+    private List<Event> attending;
     @OneToMany(cascade =CascadeType.ALL)
     @JsonIgnore
-    private Set<Comment> comments;
+    private List<Comment> comments;
     @ManyToMany
     @JsonIgnore
-    private Set<User> followers;
+    private List<User> followers;
     @ManyToMany
     @JsonIgnore
-    private Set<User> following;
+    private List<User> following;
 }

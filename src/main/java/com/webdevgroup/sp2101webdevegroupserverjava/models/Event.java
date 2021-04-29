@@ -37,4 +37,25 @@ public class Event{
     @OneToMany
     @JsonIgnore
     private Set<Comment> comments;
+
+    @Override
+    public boolean equals(Object obj)
+    {
+        if(obj==null)
+            return false;
+        if (obj.getClass() != this.getClass()) {
+            return false;
+        }
+
+        Event e1=(Event) obj;
+
+        if(e1.getId().equals(this.id))
+            return true;
+        else return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return (Math.toIntExact(this.id));
+    }
 }

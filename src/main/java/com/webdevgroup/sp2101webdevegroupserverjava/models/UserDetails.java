@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
 import java.util.Set;
 
 
@@ -14,6 +15,6 @@ import java.util.Set;
 @NoArgsConstructor
 public class UserDetails {
     private User user;
-    private Set<User> followers;
-    private Set<User> following;
+    private List<User> followers;
+    private List<User> following;
 }

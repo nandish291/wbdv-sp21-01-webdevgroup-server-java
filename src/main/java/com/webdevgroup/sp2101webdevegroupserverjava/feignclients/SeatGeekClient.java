@@ -33,6 +33,6 @@ public interface SeatGeekClient {
     @GetMapping("/recommendations?per_page=5")
     Root getEventsLikeByPerformer(@RequestParam(value = "performers.id")String id);
 
-    @GetMapping("/recommendations?per_page=5")
+    @GetMapping("/recommendations?per_page=5&postal_code=10014")
     Root getEventsLikeByEvent(@RequestParam(value = "events.id")String id);
 }

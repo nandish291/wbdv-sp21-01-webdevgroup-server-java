@@ -151,12 +151,6 @@ public class UserController {
             return new ResponseEntity<>(false,HttpStatus.OK);
     }
 
-    @GetMapping("/user/events/{id}")
-    public EventBasic findEventsForUser(@PathVariable Long id)
-    {
-       return service.findEventsForUser(id);
-    }
-
     @DeleteMapping("/user/{id}")
     public Boolean deleteUser(@PathVariable Long id)
     {
@@ -165,13 +159,13 @@ public class UserController {
     }
 
     @PostMapping("/user/follow/{userId}/{targetId}")
-    public Set<User> addFollow(@PathVariable Long userId,@PathVariable Long targetId)
+    public List<User> addFollow(@PathVariable Long userId,@PathVariable Long targetId)
     {
         return service.addFollow(userId,targetId);
     }
 
     @PostMapping("/user/unfollow/{userId}/{targetId}")
-    public Set<User> deleteFollow(@PathVariable Long userId, @PathVariable Long targetId)
+    public List<User> deleteFollow(@PathVariable Long userId, @PathVariable Long targetId)
     {
         return service.deleteFollow(userId,targetId);
     }

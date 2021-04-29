@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -78,30 +79,24 @@ public class UserService {
         return repository.findByEmail(username);
     }
 
-    public Boolean addFollow(Long userId, Long targetId) {
+    public Set<User> addFollow(Long userId, Long targetId) {
         User user=repository.findById(userId).orElse(null);
         User target=repository.findById(targetId).orElse(null);
-        if(user!=null && target !=null) {
             user.getFollowing().add(target);
             target.getFollowers().add(user);
             repository.save(user);
             repository.save(target);
-            return true;
-        }
-        return false;
+            return target.getFollowers();
     }
 
-    public Boolean deleteFollow(Long userId, Long targetId) {
+    public Set<User> deleteFollow(Long userId, Long targetId) {
         User user=repository.findById(userId).orElse(null);
         User target=repository.findById(targetId).orElse(null);
-        if(user!=null && target !=null) {
             user.getFollowing().remove(target);
             target.getFollowers().remove(user);
             repository.save(user);
             repository.save(target);
-            return true;
-        }
-        return false;
+            return target.getFollowers();
     }
 
     public UserDetails getUserDetails(Long userId) {

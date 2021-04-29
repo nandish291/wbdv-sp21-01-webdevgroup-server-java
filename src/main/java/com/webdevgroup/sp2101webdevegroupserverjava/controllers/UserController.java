@@ -165,13 +165,13 @@ public class UserController {
     }
 
     @PostMapping("/user/follow/{userId}/{targetId}")
-    public Boolean addFollow(@PathVariable Long userId,@PathVariable Long targetId)
+    public Set<User> addFollow(@PathVariable Long userId,@PathVariable Long targetId)
     {
         return service.addFollow(userId,targetId);
     }
 
     @PostMapping("/user/unfollow/{userId}/{targetId}")
-    public Boolean deleteFollow(@PathVariable Long userId,@PathVariable Long targetId)
+    public Set<User> deleteFollow(@PathVariable Long userId, @PathVariable Long targetId)
     {
         return service.deleteFollow(userId,targetId);
     }

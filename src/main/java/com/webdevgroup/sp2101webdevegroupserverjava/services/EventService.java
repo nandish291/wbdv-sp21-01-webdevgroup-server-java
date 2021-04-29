@@ -2,14 +2,14 @@ package com.webdevgroup.sp2101webdevegroupserverjava.services;
 
 import com.webdevgroup.sp2101webdevegroupserverjava.feignclients.SeatGeekClient;
 import com.webdevgroup.sp2101webdevegroupserverjava.models.*;
-import com.webdevgroup.sp2101webdevegroupserverjava.repository.CommentRepository;
-import com.webdevgroup.sp2101webdevegroupserverjava.repository.EventRepository;
-import com.webdevgroup.sp2101webdevegroupserverjava.repository.PerformerRepository;
-import com.webdevgroup.sp2101webdevegroupserverjava.repository.VenueRepository;
+import com.webdevgroup.sp2101webdevegroupserverjava.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 
 @Service
@@ -20,6 +20,7 @@ public class EventService{
     private final PerformerRepository performerRepository;
     private final VenueRepository venueRepository;
     private final CommentRepository  commentRepository;
+    private final UserRepository userRepository;
 
     public Events getAllEvents(){
         return client.getAllEvents();
@@ -28,6 +29,7 @@ public class EventService{
     public Events getTrendingEvents(){
         return client.getTrendingEvents();
     }
+
 
     public Events searchEvents(String name){
         return client.searchEvents(name);
@@ -39,7 +41,7 @@ public class EventService{
         event=repository.findById(id).orElse(null);
         if(event==null)
             event=client.searchEventsById(id);
-        List<Comment> comments=commentRepository.findCommentsForEvent(event.getId());
+        Set<Comment> comments=commentRepository.findCommentsForEvent(event.getId());
         EventDetails eventDetails=EventDetails.builder().event(event).comment(comments).build();
         if(event.getId()!=0)
             return eventDetails;
@@ -68,5 +70,23 @@ public class EventService{
 
     public Events getEventsAroundVenue(String venue) {
         return client.getEventsAroundVenue(venue);
+    }
+
+    public Set<Event> getRecommendationsForUser(Long userId) {
+        List<Event> events= userRepository.findById(userId).orElse(null).getAttending();
+        Set<Event> reEvents=new HashSet<>();
+        int i=events.size()-1;
+        while (i>=0)
+        {
+            Root temp=client.getEventsLikeByEvent(events.get((i)).getId().toString());
+            if(reEvents.size()<5) {
+                for (Recommendation r : temp.getRecommendations()) {
+                    if(!reEvents.contains(r.getEvent()))
+                        reEvents.add(r.getEvent());
+                }
+            }
+            i--;
+        }
+        return reEvents;
     }
 }

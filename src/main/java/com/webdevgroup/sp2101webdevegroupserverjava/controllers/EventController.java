@@ -7,10 +7,13 @@ import com.webdevgroup.sp2101webdevegroupserverjava.services.EventService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+import java.util.Set;
+
 
 @RestController
 @RequiredArgsConstructor
-@CrossOrigin(origins = {"http://localhost:3000","http://wbdv-client-react-s1.herokuapp.com"}, allowCredentials = "true")
+@CrossOrigin(origins = {"http://localhost:3000","http://wbdv-client-react-s1.herokuapp.com","https://wbdv-client-react-s1.herokuapp.com"}, allowCredentials = "true")
 public class EventController {
 
     private final EventService service;
@@ -51,5 +54,11 @@ public class EventController {
     boolean updateEvent(@RequestBody Event event)
     {
         return service.createEvent(event);
+    }
+
+    @GetMapping("/events/recommendations/{userId}")
+    Set<Event> getRecommendationsForUser(@PathVariable Long userId)
+    {
+        return service.getRecommendationsForUser(userId);
     }
 }

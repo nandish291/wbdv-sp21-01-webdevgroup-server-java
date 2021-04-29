@@ -1,5 +1,6 @@
 package com.webdevgroup.sp2101webdevegroupserverjava.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -23,7 +24,7 @@ public class Event{
     private Date datetime_local;
     @ManyToMany
     @NotNull
-    private Set<Performer> performers;
+    private List<Performer> performers;
     @ManyToOne(cascade = CascadeType.ALL)
     @NotNull
     private Venue venue;
@@ -33,4 +34,28 @@ public class Event{
     private String type;
     private int likes;
     private int attending;
+    @OneToMany
+    @JsonIgnore
+    private Set<Comment> comments;
+
+    @Override
+    public boolean equals(Object obj)
+    {
+        if(obj==null)
+            return false;
+        if (obj.getClass() != this.getClass()) {
+            return false;
+        }
+
+        Event e1=(Event) obj;
+
+        if(e1.getId().equals(this.id))
+            return true;
+        else return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return (Math.toIntExact(this.id));
+    }
 }

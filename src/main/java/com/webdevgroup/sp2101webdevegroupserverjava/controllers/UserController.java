@@ -1,13 +1,9 @@
 package com.webdevgroup.sp2101webdevegroupserverjava.controllers;
 
 import com.webdevgroup.sp2101webdevegroupserverjava.mapper.UserUserBasicMapper;
-import com.webdevgroup.sp2101webdevegroupserverjava.models.Event;
-import com.webdevgroup.sp2101webdevegroupserverjava.models.User;
-import com.webdevgroup.sp2101webdevegroupserverjava.models.UserBasic;
-import com.webdevgroup.sp2101webdevegroupserverjava.models.UserLogin;
+import com.webdevgroup.sp2101webdevegroupserverjava.models.*;
 import com.webdevgroup.sp2101webdevegroupserverjava.services.UserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,41 +11,54 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpSession;
 import com.webdevgroup.sp2101webdevegroupserverjava.services.EventService;
 
+import java.util.List;
+import java.util.Set;
+
 
 @RestController
 @RequiredArgsConstructor
-@CrossOrigin(origins = {"http://localhost:3000","http://wbdv-client-react-s1.herokuapp.com"},allowCredentials = "true")
+@CrossOrigin(origins = {"http://localhost:3000","http://wbdv-client-react-s1.herokuapp.com","https://wbdv-client-react-s1.herokuapp.com"},allowCredentials = "true")
 public class UserController {
 
-    @Autowired
-    UserService service;
-    @Autowired
-    EventService eventService;
-    @Autowired
-    UserUserBasicMapper mapper;
+    private final UserService service;
+    private final EventService eventService;
+    private final UserUserBasicMapper mapper;
 
-    @PostMapping("/api/register")
-    public Integer register(
-            @RequestBody User user,
-            HttpSession session) {
-
-        if (service.findUserByUserName(user.getUsername()) != null) {
-            return -1;
-        }
-        user.setType("USER");
-        service.createUser(user);
-        return 1;
+    @GetMapping("/users")
+    public List<UserBasic> getAllUsers()
+    {
+        return service.findAllUsers();
     }
 
-    @PostMapping("/api/login")
+    @PostMapping("/register")
+    public ResponseEntity<Boolean> register(
+            @RequestBody User user,
+            HttpSession session) {
+        if (service.findUserByUserName(user.getUserName()) != null
+        || service.findByEmail(user.getEmail())) {
+            return new ResponseEntity<>(false,HttpStatus.BAD_REQUEST);
+        }
+        service.createUser(user);
+        return new ResponseEntity<>(true,HttpStatus.OK);
+    }
+
+    @PostMapping("/login")
     public UserBasic login(
             @RequestBody UserLogin user,
             HttpSession session) {
 
-        User registeredUser = service.findUserByUserName(user.getUsername());
-        if (registeredUser!=null && registeredUser.getUsername().equals(user.getUsername())
+        User registeredUser;
+        if(user.getUsername().matches("(.*)@(.*)\\.(.*)"))
+        {
+            registeredUser=service.findUserByEmail(user.getUsername());
+        }
+        else
+        {
+            registeredUser=service.findUserByUserName(user.getUsername());
+        }
 
-                && registeredUser.getPassword().equals(user.getPassword())) {
+
+        if (registeredUser!=null && registeredUser.getPassword().equals(user.getPassword())) {
             session.setAttribute("currentUser", registeredUser);
             return mapper.UserToUserBasic(registeredUser);
         }
@@ -57,7 +66,7 @@ public class UserController {
             return new UserBasic();
     }
 
-    @GetMapping("/currentUser")
+    @GetMapping("/currentuser")
     public UserBasic currentUser(HttpSession session) {
         User obj=(User)session.getAttribute("currentUser");
         if(obj==null)
@@ -65,14 +74,15 @@ public class UserController {
         return mapper.UserToUserBasic(obj);
     }
 
-    @GetMapping("/api/profile")
+    @GetMapping("/profile")
     public User profile(HttpSession session) {
         User currentUser = (User)
                 session.getAttribute("currentUser");
         return currentUser;
     }
 
-    @PostMapping("/api/logout")
+    @PostMapping("/logout")
+    @ResponseStatus(HttpStatus.OK)
     public void logout
             (HttpSession session) {
         session.invalidate();
@@ -85,42 +95,14 @@ public class UserController {
         return service.findUserById(uid);
     }
 
-    @PutMapping("/user/{uid}/update")
+    @PutMapping("/user/update")
     public User updateUser(
-            @PathVariable("uid") Long uid,
             @RequestBody User user
     ) {
 
         return service.updateUser(user);
     }
 
-    @PutMapping("/user/{uid}/add_interested_event")
-    public User addEventToInterestedForUser(
-            @PathVariable("uid") Long uid,
-            @RequestBody Event event
-    ) {
-
-        User user=service.findUserById(uid);
-
-        eventService.createEvent(event);
-
-        user.getInterested().add(event);
-
-        return service.updateUser(user);
-    }
-
-    @DeleteMapping("/user/{uid}/delete_interested_event/{eid}")
-    public User deleteEventFromInterestedForUser(
-            @PathVariable("uid") Long uid,
-            @PathVariable("eid") Long eid) {
-
-
-        Event event=eventService.getEventById(eid).getEvent();
-        User user=service.findUserById(uid);
-        user.getInterested().remove(event);
-
-        return service.updateUser(user);
-    }
 
     @PutMapping("/user/{uid}/add_attended_event")
     public User AddEventToAttendingForUser(
@@ -148,5 +130,49 @@ public class UserController {
         user.getAttending().remove(event);
 
         return service.updateUser(user);
+    }
+
+    @GetMapping("/username/{username}")
+    public ResponseEntity<Boolean> checkUserName(@PathVariable("username")String userName)
+    {
+        User user= service.findUserByUserName(userName);
+        if(user!=null)
+            return new ResponseEntity<>(true,HttpStatus.BAD_REQUEST);
+        else
+            return new ResponseEntity<>(false,HttpStatus.OK);
+    }
+
+    @GetMapping("/email/{email}")
+    public ResponseEntity<Boolean> checkEmail(@PathVariable("email")String email)
+    {
+        if(service.findByEmail(email))
+            return new ResponseEntity<>(true,HttpStatus.BAD_REQUEST);
+        else
+            return new ResponseEntity<>(false,HttpStatus.OK);
+    }
+
+    @DeleteMapping("/user/{id}")
+    public Boolean deleteUser(@PathVariable Long id)
+    {
+        service.deleteUser(id);
+        return true;
+    }
+
+    @PostMapping("/user/follow/{userId}/{targetId}")
+    public List<User> addFollow(@PathVariable Long userId,@PathVariable Long targetId)
+    {
+        return service.addFollow(userId,targetId);
+    }
+
+    @PostMapping("/user/unfollow/{userId}/{targetId}")
+    public List<User> deleteFollow(@PathVariable Long userId, @PathVariable Long targetId)
+    {
+        return service.deleteFollow(userId,targetId);
+    }
+
+    @GetMapping("/user/details/{userId}")
+    public UserDetails getUserDetails(@PathVariable Long userId)
+    {
+        return service.getUserDetails(userId);
     }
 }

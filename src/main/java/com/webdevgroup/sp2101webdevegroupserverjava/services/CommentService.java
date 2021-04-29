@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Set;
 
 @RequiredArgsConstructor
 @Service
@@ -17,7 +18,7 @@ public class CommentService {
     private final EventRepository    eventRepository;
     private final EventService eventService;
 
-    public List<Comment> addComment(Comment comment)
+    public Set<Comment> addComment(Comment comment)
     {
         Event event=eventRepository.findById(comment.getEvent().getId()).orElse(null);
         if(event==null)
@@ -26,7 +27,7 @@ public class CommentService {
         return commentRepository.findCommentsForEvent(comment.getEvent().getId());
     }
 
-    public List<Comment> findCommentsForEvent(Long eid) {
+    public Set<Comment> findCommentsForEvent(Long eid) {
         return commentRepository.findCommentsForEvent(eid);
     }
 

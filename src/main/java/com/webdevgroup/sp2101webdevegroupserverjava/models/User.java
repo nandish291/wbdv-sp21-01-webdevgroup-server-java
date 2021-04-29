@@ -1,14 +1,13 @@
 package com.webdevgroup.sp2101webdevegroupserverjava.models;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.annotations.Fetch;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.sql.Date;
 import java.util.List;
@@ -24,29 +23,33 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @NotBlank
     @NotNull
     private String firstName;
-    @NotBlank
     @NotNull
     private String lastName;
-    @NotBlank
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+    @NotNull
     private Date dob;
-    @NotBlank
+    @NotNull
     private String gender;
-    @NotBlank
     @NotNull
     @Column(unique = true)
     private String userName;
-    @NotBlank
+    @NotNull
     private String password;
-    @NotBlank
+    @NotNull
     private String email;
-    @NotBlank
+    @NotNull
     private String type;
     @ManyToMany
-    private Set<Event> interested;
+    private List<Event> attending;
+    @OneToMany(cascade =CascadeType.ALL)
+    @JsonIgnore
+    private List<Comment> comments;
     @ManyToMany
-    private Set<Event> attending;
+    @JsonIgnore
+    private List<User> followers;
+    @ManyToMany
+    @JsonIgnore
+    private List<User> following;
 }

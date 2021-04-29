@@ -1,6 +1,7 @@
 package com.webdevgroup.sp2101webdevegroupserverjava.models;
 
 import lombok.*;
+import org.hibernate.annotations.Cascade;
 
 import javax.persistence.*;
 
@@ -16,7 +17,7 @@ public class Comment {
     private Long id;
     @ManyToOne
     private User user;
-    @ManyToOne
+    @ManyToOne()
     private Event event;
     private String comment;
     private String userName;

@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.Cascade;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -41,15 +42,15 @@ public class User {
     private String email;
     @NotNull
     private String type;
-    @ManyToMany
-    private List<Event> attending;
-    @OneToMany(cascade =CascadeType.ALL)
-    @JsonIgnore
+    @OneToMany
     private List<Comment> comments;
-    @ManyToMany
+    @ManyToMany()
+    @Cascade(org.hibernate.annotations.CascadeType.ALL)
+    private List<Event> attending;
+    @ManyToMany()
     @JsonIgnore
     private List<User> followers;
-    @ManyToMany
+    @ManyToMany()
     @JsonIgnore
     private List<User> following;
 }

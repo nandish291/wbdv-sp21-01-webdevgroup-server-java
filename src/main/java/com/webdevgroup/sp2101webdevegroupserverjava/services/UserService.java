@@ -55,6 +55,9 @@ public class UserService {
     public void deleteUser(Long id) {
         User user=repository.findById(id).orElse(null);
         List<Comment> comments= commentRepository.findCommentByUserName(user.getUserName());
+        user.setFollowers(null);
+        user.setFollowing(null);
+        repository.save(user);
         for(Comment comment:comments)
             commentRepository.deleteById(comment.getId());
         repository.deleteById(id);

@@ -34,9 +34,7 @@ public class Event{
     private String type;
     private int likes;
     private int attending;
-    @OneToMany
-    @JsonIgnore
-    private Set<Comment> comments;
+
 
     @Override
     public boolean equals(Object obj)

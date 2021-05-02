@@ -12,7 +12,7 @@ import java.util.Set;
 
 @RequiredArgsConstructor
 @RestController
-@CrossOrigin(origins = {"http://localhost:3000","https://event-tracker-nm.herokuapp.com/","http://wbdv-client-react-s1.herokuapp.com","https://wbdv-client-react-s1.herokuapp.com"})
+@CrossOrigin(origins = {"http://localhost:3000","https://event-tracker-nm.herokuapp.com","http://wbdv-client-react-s1.herokuapp.com","https://wbdv-client-react-s1.herokuapp.com"})
 public class CommentController {
 
     private final CommentService service;
